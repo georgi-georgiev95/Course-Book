@@ -1,7 +1,10 @@
 const router = require("express").Router();
 
-router.get("/", (req, res) => {
-    res.render('home')
+const courseService = require('../services/courseService');
+
+router.get("/", async (req, res) => {
+    const courses = await courseService.getAll().lean();
+    res.render('home', { courses });
 });
 
 router.get('/404', (req, res) => {
