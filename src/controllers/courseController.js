@@ -28,7 +28,12 @@ router.post('/create', async (req, res) => {
 
 router.get('/:courseId/details', async (req, res) => {
     const course = await courseService.getOne(req.params.courseId).lean();
-    res.render('courses/details', { course });
+    
+    let isOwner = req.user?.id == course.owner._id;
+    let isUser = req.user?.id;
+    let isSigned = course.signUpList.some(x => x._id == req.user?.id);
+
+    res.render('courses/details', { course, isOwner, isUser, isSigned });
 });
 
 router.get('/:courseId/edit', async (req, res) => {
