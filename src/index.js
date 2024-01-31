@@ -1,8 +1,15 @@
 const express = require("express");
+const path = require("path");
 
 const router = require("./router");
 
 const app = express();
+
+// setup body parser;
+app.use(express.urlencoded({ extended: false }));
+
+// setup static data;
+app.use(express.static(path.resolve(__dirname, "./public")));
 
 app.use(router);
 
