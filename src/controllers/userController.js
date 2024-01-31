@@ -14,11 +14,27 @@ router.get("/login", (req, res) => {
 
 router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
-    const userData = await userService.register({ username, email, password });
-    const token = await generateToken(userData);
-    res.cookie(ENV.COOKIE_NAME, token);
-    res.redirect('/');
+    try {
+        const userData = await userService.register({ username, email, password });
+        const token = await generateToken(userData);
+        res.cookie(ENV.COOKIE_NAME, token);
+        res.redirect('/');
+    } catch (err) {
+        console.log(err);
+    }
 });
+
+router.post("/login", async (req, res) => { 
+    const { email, password } = req.body;
+    try {
+        const userData = await userService.login({ email, password });
+        const token = await generateToken(userData);
+        res.cookie(ENV.COOKIE_NAME, token);
+        res.redirect('/');
+    } catch (err) {
+        console.log(err);
+    }
+})
 
 router.get('/logout', (req, res) => {
     res.clearCookie(ENV.COOKIE_NAME);
