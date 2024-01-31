@@ -1,16 +1,29 @@
 const jwt = require('../lib/jwt');
 const ENV = require('../utils/constants');
 
-exports.auth = () => (req, res, next) => {
+exports.auth = async (req, res, next) => {
     const token = req.cookies[ENV.COOKIE_NAME];
-    if (!token) {
-        return res.redirect('/users/login');
-    }
-    jwt.verify(token, ENV.SECRET, (err, payload) => {
-        if (err) {
-            return res.redirect('/users/login');
+
+    if (token) {
+        try {
+            const decodedToken = await jwt.verify(token, ENV.SECRET);
+            req.user = decodedToken;
+            res.locals.user = decodedToken;
+            res.locals.isAuthenticated = true;
+            next();
+        } catch (err) {
+            res.clearCookie(ENV.COOKIE_NAME);
+            res.redirect('/users/login');
         }
-        req.user = payload;
+    } else {
         next();
-    })
+    }
 };
+
+exports.isAuth = async (req, res, next) => {
+    if (!req.user?.id) {
+        res.redirect('/404');
+    }
+
+    next();
+}

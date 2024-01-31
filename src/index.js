@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 
 const router = require("./router");
 const ENV = require("./utils/constants");
+const {auth} = require("./middlewares/authMiddleware");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.set('view engine', 'hbs');
 app.set('views', path.resolve(__dirname, "./views"));
 
 app.use(cookieParser());
+app.use(auth);
 app.use(router);
 
 app.listen(ENV.PORT, () => console.log(`Server is running on port ${ENV.PORT}...`));
