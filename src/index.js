@@ -1,10 +1,16 @@
 const express = require("express");
 const path = require("path");
 const handlebars = require("express-handlebars");
+const mongoose = require("mongoose");
 
 const router = require("./router");
 
 const app = express();
+
+// setup mongoose
+mongoose.connect('mongodb://localhost:27017/courseBook')
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.error(err));
 
 // setup body parser;
 app.use(express.urlencoded({ extended: false }));
