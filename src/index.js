@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const handlebars = require("express-handlebars");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 
 const router = require("./router");
 const ENV = require("./utils/constants");
@@ -26,6 +27,7 @@ app.engine("hbs", handlebars.engine({
 app.set('view engine', 'hbs');
 app.set('views', path.resolve(__dirname, "./views"));
 
+app.use(cookieParser());
 app.use(router);
 
 app.listen(ENV.PORT, () => console.log(`Server is running on port ${ENV.PORT}...`));
