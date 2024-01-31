@@ -51,6 +51,11 @@ router.post('/:courseId/edit', async (req, res) => {
     } catch (err) {
         console.log(err);
     }
+});
+
+router.get('/:courseId/delete', async (req, res) => {
+    await courseService.delete(req.params.courseId);
+    res.redirect('/courses/dashboard');
 })
 
 module.exports = router;
