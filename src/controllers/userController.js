@@ -18,6 +18,11 @@ router.post("/register", async (req, res) => {
     const token = await generateToken(userData);
     res.cookie(ENV.COOKIE_NAME, token);
     res.redirect('/');
-})
+});
+
+router.get('/logout', (req, res) => {
+    res.clearCookie(ENV.COOKIE_NAME);
+    res.redirect('/')
+});
 
 module.exports = router;
