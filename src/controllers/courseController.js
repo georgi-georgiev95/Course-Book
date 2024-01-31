@@ -16,10 +16,32 @@ router.get('/create', (req, res) => {
 router.post('/create', async (req, res) => {
     const courseData = {
         ...req.body,
-        owner: req.user.id 
+        owner: req.user.id
     };
     try {
         await courseService.create(courseData);
+        res.redirect('/courses/dashboard');
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.get('/:courseId/details', async (req, res) => {
+    const course = await courseService.getOne(req.params.courseId).lean();
+    res.render('courses/details', { course });
+});
+
+router.get('/:courseId/edit', async (req, res) => {
+    const course = await courseService.getOne(req.params.courseId).lean();
+    res.render('courses/edit', { course });
+});
+
+router.post('/:courseId/edit', async (req, res) => {
+    const id = req.params.courseId;
+    const courseData = req.body;
+
+    try {
+        await courseService.update(id, courseData);
         res.redirect('/courses/dashboard');
     } catch (err) {
         console.log(err);
